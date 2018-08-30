@@ -17,6 +17,7 @@ fn establish_connection() -> PgConnection {
 }
 
 fn main() {
+    let _conn = establish_connection();
     println!("Hello, world!");
 }
 
@@ -57,6 +58,7 @@ mod some_toy_tests {
                 title: "My Todo".to_string(),
                 list_id: list.id,
             };
+
             let todo: models::Todo = diesel::insert_into(schema::todos::table)
                 .values(&todo)
                 .get_result(&conn)
@@ -64,7 +66,7 @@ mod some_toy_tests {
 
             assert_eq!(todo.title, "My Todo");
             assert_eq!(todo.list_id, list.id);
-            assert!(todo.is_completed, false);
+            assert_eq!(todo.is_completed, false);
 
             Ok(())
         });

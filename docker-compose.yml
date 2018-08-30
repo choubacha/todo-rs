@@ -23,6 +23,7 @@ services:
       - '.:/code'
     environment:
       - DATABASE_URL=postgres://postgres:pass@db/diesel
+      - RUST_BACKTRACE=1
   migrate:
     build:
       context: .
