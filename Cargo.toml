@@ -1,0 +1,7 @@
+[package]
+name = "todo-rs"
+version = "0.1.0"
+authors = ["Kevin Choubacha <chewbacha@gmail.com>"]
+
+[dependencies]
+diesel = { version = "1.0.0", features = ["postgres"] }
