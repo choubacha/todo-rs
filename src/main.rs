@@ -27,12 +27,48 @@ mod some_toy_tests {
     #[test]
     fn test_some_things() {
         let conn = establish_connection();
-        let list = models::NewList { title: "My list".to_string() };
-        let list: models::List = diesel::insert_into(schema::lists::table)
-            .values(&list)
-            .get_result(&conn)
-            .expect("error saving the record");
+        let result = conn.transaction::<_, diesel::result::Error, _>(|| {
+            let list = models::NewList { title: "My list".to_string() };
+            let list: models::List = diesel::insert_into(schema::lists::table)
+                .values(&list)
+                .get_result(&conn)
+                .expect("error saving the record");
 
-        assert_eq!(list.title, "My list");
+            assert_eq!(list.title, "My list");
+            Ok(())
+        });
+
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_inserting_todos() {
+        let conn = establish_connection();
+        let result = conn.transaction::<_, diesel::result::Error, _>(|| {
+            let list = models::NewList { title: "My list".to_string() };
+            let list: models::List = diesel::insert_into(schema::lists::table)
+                .values(&list)
+                .get_result(&conn)
+                .expect("error saving the record");
+
+            assert_eq!(list.title, "My list");
+
+            let todo = models::NewTodo {
+                title: "My Todo".to_string(),
+                list_id: list.id,
+            };
+            let todo: models::Todo = diesel::insert_into(schema::todos::table)
+                .values(&todo)
+                .get_result(&conn)
+                .expect("error saving todo");
+
+            assert_eq!(todo.title, "My Todo");
+            assert_eq!(todo.list_id, list.id);
+            assert!(todo.is_completed, false);
+
+            Ok(())
+        });
+
+        assert!(result.is_ok());
     }
 }

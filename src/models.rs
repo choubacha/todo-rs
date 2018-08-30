@@ -24,6 +24,5 @@ pub struct Todo {
 #[table_name="todos"]
 pub struct NewTodo {
     pub title: String,
-    pub is_completed: bool,
     pub list_id: i32, // TODO: Find a better id type?
 }

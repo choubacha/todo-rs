@@ -9,8 +9,8 @@ table! {
     todos (id) {
         id -> Int4,
         title -> Text,
-        is_completed -> Nullable<Bool>,
-        list_id -> Nullable<Int4>,
+        is_completed -> Bool,
+        list_id -> Int4,
     }
 }
 
